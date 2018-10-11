@@ -46,7 +46,7 @@
           tracking.ColorTracker.prototype.minGroupSize = 1;
           tracker.on('track', function(event) {
             const tab = new Array();
-            const element = document.getElementById('block');
+            const element = document.getElementById('chameleon');
             context.clearRect(0, 0, canvas.width, canvas.height);
             event.data.forEach(function(rect) {
               if (rect.color === 'custom') {
