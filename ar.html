@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>No more</title>
+  <title>tracking.js - color with camera</title>
   <meta http-equiv="cache-control" content="max-age=0">
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
@@ -10,24 +10,23 @@
   <meta http-equiv="pragma" content="no-cache">
   <script src="build/tracking-min.js"></script>
   <script src="build/dat.gui.min.js"></script>
+  <!-- <script src="assets/stats.min.js"></script> -->
+  <!-- <script src="assets/color_camera_gui.js"></script> -->
 </head>
 <style>
-body{
-  padding:0;
-  overflow: hidden;
-}
-video, canvas {
-  position: absolute;     
-  object-fit: cover;
-  width:100%;
-  height:100%;
-}
-</style>
+    video, canvas {
+      position: absolute;     
+      object-fit: cover;
+      width:100%;
+      height:100%;
+    }
+    </style>
 <body>
       <div class="demo-frame">
         <div class="demo-container">
           <video id="video" preload autoplay loop muted></video>
           <canvas id="canvas"></canvas>
+          <div id="block" style="z-index:999;width:200px;height:200px;position:absolute;top:50%; left:50%;transform:translateY(-50%)"></div>
         </div>
       </div>
     
@@ -67,6 +66,8 @@ video, canvas {
           tracking.ColorTracker.prototype.minDimension = 1;
           tracking.ColorTracker.prototype.minGroupSize = 1;
           tracker.on('track', function(event) {
+            const tab = new Array();
+            const element = document.getElementById('block');
             context.clearRect(0, 0, canvas.width, canvas.height);
             event.data.forEach(function(rect) {
               if (rect.color === 'custom') {
@@ -78,6 +79,9 @@ video, canvas {
               context.fillStyle = "#fff";
               context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
               context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+              // tab.push(rect.color);
+            // console.log("1 "+tab)
+            element.style.background = rect.color;
             });
           });
         //  initGUIControllers(tracker);
