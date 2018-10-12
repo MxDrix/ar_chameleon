@@ -36,7 +36,6 @@ window.onload = function() {
     return false;
   });
 
-  addingColors(tata);
 
 
   /*
@@ -45,7 +44,7 @@ window.onload = function() {
   */
   /*  var tracker = new tracking.ColorTracker(['magenta', 'cyan', 'yellow', 'black','white']);
   */  
-  var tracker = new tracking.ColorTracker(watchedColors);
+  var tracker = new tracking.ColorTracker(addingColors(tata));
   
   tracking.track('#video', tracker, { camera: true });
   tracking.ColorTracker.prototype.minDimension = 1;
@@ -134,7 +133,7 @@ function addingColors(tab) {
     var customColorB = parseInt(components[3], 16);
     //registering custom colors with a small tolerance
     tracking.ColorTracker.registerColor(tab[i], function(r, g, b) {
-      if ((r < customColorR - 30 && r > customColorR + 30)  && (g < customColorG - 30 && r > customColorG + 30) && (b < customColorB - 30 && r > customColorB + 30)) {
+      if ((r = customColorR)  && (g = customColorG) && (b = customColorB)) {
         return true;
       }
       return false;
@@ -146,7 +145,7 @@ function addingColors(tab) {
 }
 
 
-let tata = ['#663300' , '#663300' , '#cc3300' , '#993300' , '#990000' , '#800000' , '#993333'];
+let tata = ['#663300' , '#663300' , '#cc3300' , '#993300' , '#990000' , '#800000' , '#993333', '#ffffff', '#000000'];
 console.log(tata);
 
 /*mixColor(tata);  
