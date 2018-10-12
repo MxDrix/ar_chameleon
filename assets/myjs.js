@@ -35,13 +35,17 @@ window.onload = function() {
     }
     return false;
   });
+
+  addingColors(tata);
+
+
   /*
   Une fois les nouvelles couleurs enregistrer, on peux les initialiser dans notre nouveau tracker
   c'est un tableau de couleur.
   */
   /*  var tracker = new tracking.ColorTracker(['magenta', 'cyan', 'yellow', 'black','white']);
   */  
-  var tracker = new tracking.ColorTracker(['#000000','#ffffff']);
+  var tracker = new tracking.ColorTracker(watchedColors);
   
   tracking.track('#video', tracker, { camera: true });
   tracking.ColorTracker.prototype.minDimension = 1;
@@ -70,27 +74,39 @@ window.onload = function() {
 
 
 
-function addColor(tab) {
+function mixColor(tab) {
   let colorTotalTab = [];
   console.log(colorTotalTab);
   for (let i = tab.length - 1; i >= 0; i--) {
     colorTotalTab.push(createCustomColorMix(tab[i])); 
-  }
+  };
   console.log(colorTotalTab);
-  mixColor(colorTotalTab);
+  synthesize(colorTotalTab);
 };
 
-function mixColor(tab) {
+function synthesize(tab) {
   let colorsMixed = [];
   var totalColorR = 0;
   var totalColorG = 0;
   var totalColorB = 0;
   for (var i = tab.length - 1; i >= 0; i--) {
-    tab[i];
-    for (var j = i.length - 1; j >= 0; j--) {
-      i[j]
-    }
-  }
+    totalColorR = totalColorR + tab[i][0];
+    totalColorG = totalColorG + tab[i][1];
+    totalColorB = totalColorB + tab[i][2];
+  };
+  console.log(totalColorR);
+  console.log(totalColorG);
+  console.log(totalColorB);
+
+  finalColorR = totalColorR / tab.length;
+  finalColorG = totalColorG / tab.length;
+  finalColorB = totalColorB / tab.length;
+  console.log(finalColorR);
+  console.log(finalColorG);
+  console.log(finalColorB);
+
+  colorsMixed.push(finalColorR , finalColorG , finalColorB);
+  console.log(colorsMixed);
 }
 
 function createCustomColorMix(value) {
@@ -107,7 +123,31 @@ function createCustomColorMix(value) {
 };
 
 
+//adding colors from a tab of hexa
+function addingColors(tab) {
+  var watchedColors = []
+  for (var i = tab.length - 1; i >= 0; i--) {
+    //converting hexadecimal in RGB
+    var components = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(tab[i]);
+    var customColorR = parseInt(components[1], 16);
+    var customColorG = parseInt(components[2], 16);
+    var customColorB = parseInt(components[3], 16);
+    //registering custom colors with a small tolerance
+    tracking.ColorTracker.registerColor(tab[i], function(r, g, b) {
+      if ((r < customColorR - 30 && r > customColorR + 30)  && (g < customColorG - 30 && r > customColorG + 30) && (b < customColorB - 30 && r > customColorB + 30)) {
+        return true;
+      }
+      return false;
+    });
+    //add the hexadecimal(name) to the watched colors
+    watchedColors.push(tab[i]);
+  }
+  return watchedColors;
+}
+
+
 let tata = ['#663300' , '#663300' , '#cc3300' , '#993300' , '#990000' , '#800000' , '#993333'];
 console.log(tata);
 
-addColor(tata);  
+/*mixColor(tata);  
+*/
