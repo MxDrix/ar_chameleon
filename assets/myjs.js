@@ -44,7 +44,7 @@ window.onload = function() {
   */
   /*  var tracker = new tracking.ColorTracker(['magenta', 'cyan', 'yellow', 'black','white']);
   */  
-  var tracker = new tracking.ColorTracker(addingColors(tata));
+  var tracker = new tracking.ColorTracker(addingColors(colorSample));
   
   tracking.track('#video', tracker, { camera: true });
   tracking.ColorTracker.prototype.minDimension = 1;
@@ -93,16 +93,10 @@ function synthesize(tab) {
     totalColorG = totalColorG + tab[i][1];
     totalColorB = totalColorB + tab[i][2];
   };
-  console.log(totalColorR);
-  console.log(totalColorG);
-  console.log(totalColorB);
 
   finalColorR = totalColorR / tab.length;
   finalColorG = totalColorG / tab.length;
   finalColorB = totalColorB / tab.length;
-  console.log(finalColorR);
-  console.log(finalColorG);
-  console.log(finalColorB);
 
   colorsMixed.push(finalColorR , finalColorG , finalColorB);
   console.log(colorsMixed);
@@ -133,7 +127,10 @@ function addingColors(tab) {
     var customColorB = parseInt(components[3], 16);
     //registering custom colors with a small tolerance
     tracking.ColorTracker.registerColor(tab[i], function(r, g, b) {
-      if ((r = customColorR)  && (g = customColorG) && (b = customColorB)) {
+      var tolerance = 30;
+      if ((r < customColorR - tolerance && r > customColorR + tolerance) 
+        && (g < customColorG - tolerance && g > customColorG + tolerance) 
+        && (b < customColorB - tolerance && b > customColorB + tolerance)) {
         return true;
       }
       return false;
@@ -145,8 +142,8 @@ function addingColors(tab) {
 }
 
 
-let tata = ['#663300' , '#663300' , '#cc3300' , '#993300' , '#990000' , '#800000' , '#993333', '#ffffff', '#000000'];
-console.log(tata);
+let colorSample = ['#663300' , '#663300' , '#cc3300' , '#993300' , '#990000' , '#800000' , '#993333', '#ffffff', '#000000'];
+console.log(colorSample);
 
-/*mixColor(tata);  
+/*mixColor(colorSample);  
 */
