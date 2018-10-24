@@ -99,7 +99,12 @@ function synthesize(tab) {
   finalColorB = totalColorB / tab.length;
 
   colorsMixed.push(finalColorR , finalColorG , finalColorB);
+  mainColorFill = 'rgb(' + finalColorR + ',' + finalColorG + ',' + finalColorB + ')';
   console.log(colorsMixed);
+  document.getElementById('leg1').style.fill = mainColorFill;
+  document.getElementById('leg2').style.fill = mainColorFill;
+  document.getElementById('leg3').style.fill = mainColorFill;
+  document.getElementById('leg4').style.fill = mainColorFill;
 }
 
 function createCustomColorMix(value) {
@@ -145,5 +150,6 @@ function addingColors(tab) {
 let colorSample = ['#663300' , '#663300' , '#cc3300' , '#993300' , '#990000' , '#800000' , '#993333', '#ffffff', '#000000'];
 console.log(colorSample);
 
-/*mixColor(colorSample);  
-*/
+document.addEventListener("DOMContentLoaded", function() {
+  mixColor(colorSample);  
+})
