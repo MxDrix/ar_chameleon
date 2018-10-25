@@ -47,13 +47,15 @@ window.onload = function() {
   var tracker = new tracking.ColorTracker(addingColors(colorSample));
   
   tracking.track('#video', tracker, { camera: true });
-  tracking.ColorTracker.prototype.minDimension = 1;
-  tracking.ColorTracker.prototype.minGroupSize = 1;
+  tracking.ColorTracker.prototype.minDimension = 10;
+  tracking.ColorTracker.prototype.minGroupSize = 10;
   tracker.on('track', function(event) {
-    const tab = new Array();
+    const allColors = new Array();
     const element = document.getElementById('chameleon');
     context.clearRect(0, 0, canvas.width, canvas.height);
+
     event.data.forEach(function(rect) {
+      console.log(rect.color);
       if (rect.color === 'custom') {
         rect.color = tracker.customColor;
       }
@@ -64,8 +66,10 @@ window.onload = function() {
       context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
       context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
       // Ajout de la couleur sur l'élément afficher à l'écran, il va falloir faire ne sorte de bien récupérer la moyenne de toutes les couleurs pour lui ajout en background ou autre
-      tab.push(rect.color);
-      element.style.background = rect.color;
+      allColors.push(rect.color);
+/*      console.log(allColors);
+*/
+      mixColor(allColors);
     });
   });
 };
@@ -119,11 +123,6 @@ function colorsApply() {
   strongDarkColorFill = 'rgb(' + strongDarkColorR + ',' + strongDarkColorG + ',' + strongDarkColorB + ')';
   lightColorFill = 'rgb(' + lightColorR + ',' + lightColorG + ',' + lightColorB + ')';
 
-  console.log(mainColorFill);
-  console.log(darkColorFill);
-  console.log(strongDarkColorFill);
-  console.log(lightColorFill);
-
   var base = document.getElementById('base');
   base.style.fill = mainColorFill;
 
@@ -169,10 +168,13 @@ function addingColors(tab) {
     var customColorB = parseInt(components[3], 16);
     //registering custom colors with a small tolerance
     tracking.ColorTracker.registerColor(tab[i], function(r, g, b) {
-      var tolerance = 30;
-      if ((r < customColorR - tolerance && r > customColorR + tolerance) 
-        && (g < customColorG - tolerance && g > customColorG + tolerance) 
-        && (b < customColorB - tolerance && b > customColorB + tolerance)) {
+      var tolerance = 50;
+      if ((r < customColorR + tolerance) 
+        && (r > customColorR - tolerance) 
+        && (g < customColorG + tolerance) 
+        && (g > customColorG - tolerance) 
+        && (b < customColorB + tolerance)
+        && (b > customColorB - tolerance)) {
         return true;
       }
       return false;
@@ -184,9 +186,9 @@ function addingColors(tab) {
 }
 
 
-let colorSample = ['#f3f3f3' , '#a4a4a4'];
-console.log(colorSample);
+let colorSample = ['#003366' , '#00ffff' , '#000066' , '#6699ff' , '#660066' , '#ff66ff' , '#993333' , '#ff6666' , '#663300' , '#ffff66' , '#003300' , '#66ff66' , '#ffffff' , '#000000'];
 
-document.addEventListener("DOMContentLoaded", function() {
+/*document.addEventListener("DOMContentLoaded", function() {
   mixColor(colorSample);  
 })
+*/
