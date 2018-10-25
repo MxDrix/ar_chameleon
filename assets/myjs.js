@@ -93,47 +93,55 @@ function synthesize(tab) {
     totalColorB = totalColorB + tab[i][2];
   };
 
-  firstColorR = totalColorR / tab.length;
-  firstColorG = totalColorG / tab.length;
-  firstColorB = totalColorB / tab.length;
+  mainColorR = totalColorR / tab.length;
+  mainColorG = totalColorG / tab.length;
+  mainColorB = totalColorB / tab.length;
 
-  secondColorR = firstColorR - 50;
-  secondColorG = firstColorG - 50;
-  secondColorB = firstColorB - 50;
+  darkColorR = mainColorR - 60;
+  darkColorG = mainColorG - 60;
+  darkColorB = mainColorB - 60;
 
-  thirdColorR = firstColorR + 50;
-  thirdColorG = firstColorG + 50;
-  thirdColorB = firstColorB + 50;
+  strongDarkColorR = mainColorR - 150;
+  strongDarkColorG = mainColorG - 150;
+  strongDarkColorB = mainColorB - 150;
 
+  lightColorR = mainColorR + 75;
+  lightColorG = mainColorG + 75;
+  lightColorB = mainColorB + 75;
 
-  colorsMixed.push(firstColorR , firstColorG , firstColorB);
+  colorsMixed.push(mainColorR , mainColorG , mainColorB);
   colorsApply();
 }
 
 function colorsApply() {
-  firstColorFill = 'rgb(' + firstColorR + ',' + firstColorG + ',' + firstColorB + ')';
-  secondColorFill = 'rgb(' + secondColorR + ',' + secondColorG + ',' + secondColorB + ')';
-  thirdColorFill = 'rgb(' + thirdColorR + ',' + thirdColorG + ',' + thirdColorB + ')';
+  mainColorFill = 'rgb(' + mainColorR + ',' + mainColorG + ',' + mainColorB + ')';
+  darkColorFill = 'rgb(' + darkColorR + ',' + darkColorG + ',' + darkColorB + ')';
+  strongDarkColorFill = 'rgb(' + strongDarkColorR + ',' + strongDarkColorG + ',' + strongDarkColorB + ')';
+  lightColorFill = 'rgb(' + lightColorR + ',' + lightColorG + ',' + lightColorB + ')';
 
-  console.log(firstColorFill);
-  console.log(secondColorFill);
-  console.log(thirdColorFill);
-
-  var eyeContainer = document.getElementById('eye-container');
-  eyeContainer.style.fill = thirdColorFill;
+  console.log(mainColorFill);
+  console.log(darkColorFill);
+  console.log(strongDarkColorFill);
+  console.log(lightColorFill);
 
   var base = document.getElementById('base');
-  base.style.fill = firstColorFill;
+  base.style.fill = mainColorFill;
+
+  var eyeContainer = document.getElementById('eye-container');
+  eyeContainer.style.fill = darkColorFill;
 
   var leg = document.getElementsByClassName('leg');
   for (var i = leg.length - 1; i >= 0; i--) {
-    leg[i].style.fill = secondColorFill;
+    leg[i].style.fill = darkColorFill;
   }
 
   var dots = document.getElementsByClassName('body-dots');
   for (var i = dots.length - 1; i >= 0; i--) {
-    dots[i].style.fill = 'white';
+    dots[i].style.fill = lightColorFill;
   }
+
+  var iris = document.getElementById('iris');
+  iris.style.fill = strongDarkColorFill;
 }
 
 function createCustomColorMix(value) {
@@ -176,7 +184,7 @@ function addingColors(tab) {
 }
 
 
-let colorSample = ['#ffff99' , '#ccff99' , '#66ff66' , '#ccffcc' , '#3333ff' , '#6600ff' , '#00ccff', '#ffffff'];
+let colorSample = ['#66ff66' , '#cc00ff'];
 console.log(colorSample);
 
 document.addEventListener("DOMContentLoaded", function() {
