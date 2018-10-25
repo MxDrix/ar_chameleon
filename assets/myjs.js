@@ -184,7 +184,7 @@ function addingColors(tab) {
 }
 
 
-let colorSample = ['#66ff66' , '#cc00ff'];
+let colorSample = ['#f3f3f3' , '#a4a4a4'];
 console.log(colorSample);
 
 document.addEventListener("DOMContentLoaded", function() {
