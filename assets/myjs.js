@@ -4,46 +4,52 @@ window.addEventListener("resize", function(){
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
-
 window.onload = function() {
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
-  let colorSample = ['#003366' , '#00ffff' , '#000066' , '#6699ff' , '#660066' , '#ff66ff' , '#993333' , '#ff6666' , '#663300' , '#ffff66' , '#003300' , '#66ff66' , '#ffffff' , '#000000'];  
+  let colorSample =["#000000","#ffffff","#ff0000","#ffff00","#0000ff","#00ff00",'#003366' , '#00ffff' , '#000066' , '#6699ff' , '#660066' , '#ff66ff' , '#993333' , '#ff6666' , '#663300' , '#ffff66' , '#003300' , '#66ff66' ];
   video.width = window.innerWidth;
   video.height = window.innerHeight;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   var context = canvas.getContext('2d');
+
   var tracker = new tracking.ColorTracker(addingColors(colorSample));
   
   tracking.track('#video', tracker, { camera: true });
-  tracking.ColorTracker.prototype.minDimension = 10;
-  tracking.ColorTracker.prototype.minGroupSize = 10;
-  console.log(context);
-  tracker.on('track', function(event) {
-    const allColors = new Array();
-    const element = document.getElementById('chameleon');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    event.data.forEach(function(rect) {
-      //console.log(rect.color);
-      if (rect.color === 'custom') {
-        rect.color = tracker.customColor;
-      }
-      // context.strokeStyle = rect.color;
-      // context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-      // context.font = '11px Helvetica';
-      // context.fillStyle = "#fff";
-      // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-      // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22); 
-      allColors.push(rect.color);
-    });
-    mixColor(allColors);
+  tracking.ColorTracker.prototype.minDimension = 1;
+  tracking.ColorTracker.prototype.minGroupSize = 1;
+  tracker.on('track', function(event) {    
+    if (event.data.length === 0) {
+    } else{
+        const tab = new Array();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        event.data.forEach(function(rect) {
+          console.log(rect.color);
+          console.log(colorSample);
+
+          for (var i = colorSample.length - 1; i >= 0; i--) {
+            if (rect.color == '#' + colorSample[i]) {
+            rect.color = '#' + colorSample[i];
+            console.log(rect.color);
+            //tab.push(rect.color);
+            }
+          }
+
+          context.strokeStyle = rect.color;
+          context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          context.font = '11px Helvetica';
+          context.fillStyle = "#fff";
+          context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+          //tab.push(rect.color);
+          // console.log(rect.color);
+      });
+      //console.log(tab)
+      mixColor(tab);
+    }
   });
 };
-
-
-
-
 function mixColor(tab) {
   let colorTotalTab = [];
   for (let i = tab.length - 1; i >= 0; i--) {
@@ -63,33 +69,32 @@ function synthesize(tab) {
     totalColorG = totalColorG + tab[i][1];
     totalColorB = totalColorB + tab[i][2];
   };
-
   mainColorR = totalColorR / tab.length;
   mainColorG = totalColorG / tab.length;
   mainColorB = totalColorB / tab.length;
-
   darkColorR = mainColorR - 60;
   darkColorG = mainColorG - 60;
   darkColorB = mainColorB - 60;
-
   strongDarkColorR = mainColorR - 150;
   strongDarkColorG = mainColorG - 150;
   strongDarkColorB = mainColorB - 150;
-
   lightColorR = mainColorR + 75;
   lightColorG = mainColorG + 75;
   lightColorB = mainColorB + 75;
-
   colorsMixed.push(mainColorR , mainColorG , mainColorB);
-  
   mainColorFill = 'rgb(' + mainColorR + ',' + mainColorG + ',' + mainColorB + ')';
   darkColorFill = 'rgb(' + darkColorR + ',' + darkColorG + ',' + darkColorB + ')';
   strongDarkColorFill = 'rgb(' + strongDarkColorR + ',' + strongDarkColorG + ',' + strongDarkColorB + ')';
   lightColorFill = 'rgb(' + lightColorR + ',' + lightColorG + ',' + lightColorB + ')';
-  colorsApply(mainColorFill,darkColorFill,strongDarkColorFill,lightColorFill);
+  colorsApply(mainColorFill,darkColorFill,strongDarkColorFill,lightColorFill); 
 }
 
 function colorsApply(mainColorFill,darkColorFill,strongDarkColorFill,lightColorFill) {
+  mainColorFill = 'rgb(' + mainColorR + ',' + mainColorG + ',' + mainColorB + ')';
+  darkColorFill = 'rgb(' + darkColorR + ',' + darkColorG + ',' + darkColorB + ')';
+  strongDarkColorFill = 'rgb(' + strongDarkColorR + ',' + strongDarkColorG + ',' + strongDarkColorB + ')';
+  lightColorFill = 'rgb(' + lightColorR + ',' + lightColorG + ',' + lightColorB + ')';
+  
   var base = document.getElementById('base');
   base.style.fill = mainColorFill;
 
@@ -124,29 +129,23 @@ function createCustomColorMix(value) {
 };
 
 
+
 //adding colors from a tab of hexa
 function addingColors(tab) {
-  var watchedColors = []
-  for (var i = tab.length - 1; i >= 0; i--) {
-    //converting hexadecimal in RGB
-    var components = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(tab[i]);
-    var customColorR = parseInt(components[1], 16);
-    var customColorG = parseInt(components[2], 16);
-    var customColorB = parseInt(components[3], 16);
+  let watchedColors = []
+  for (let i = tab.length - 1; i >= 0; i--) {
+    tab[i] = tab[i].replace('#','');
+    let customColorR = parseInt(tab[i].substring(0,2), 16);
+    let customColorG = parseInt(tab[i].substring(2,4), 16);
+    let customColorB = parseInt(tab[i].substring(4,6), 16);
     //registering custom colors with a small tolerance
     tracking.ColorTracker.registerColor(tab[i], function(r, g, b) {
-      var tolerance = 50;
-      if ((r < customColorR + tolerance) 
-        && (r > customColorR - tolerance) 
-        && (g < customColorG + tolerance) 
-        && (g > customColorG - tolerance) 
-        && (b < customColorB + tolerance)
-        && (b > customColorB - tolerance)) {
+      var modR,modG,modB;
+      if ((r == customColorR)  && (g == customColorG) && (b == customColorB)) {
         return true;
       }
-      return false;
+      return false;  
     });
-    //add the hexadecimal(name) to the watched colors
     watchedColors.push(tab[i]);
   }
   return watchedColors;
