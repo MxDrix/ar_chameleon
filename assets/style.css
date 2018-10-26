@@ -1,7 +1,10 @@
 .yellow {
   fill: yellow;
 }
-
+body {
+	padding: 0;
+	margin: 0;
+}
 video, canvas {
 	position: absolute;     
 	object-fit: cover;
