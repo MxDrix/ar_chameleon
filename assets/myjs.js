@@ -21,31 +21,24 @@ window.onload = function() {
   tracking.ColorTracker.prototype.minGroupSize = 1;
   tracker.on('track', function(event) {    
     if (event.data.length === 0) {
-    } else{
-        const tab = new Array();
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        event.data.forEach(function(rect) {
-          console.log(rect.color);
-          console.log(colorSample);
-
-          for (var i = colorSample.length - 1; i >= 0; i--) {
-            if (rect.color == '#' + colorSample[i]) {
-            rect.color = '#' + colorSample[i];
-            console.log(rect.color);
-            //tab.push(rect.color);
-            }
-          }
-
-          context.strokeStyle = rect.color;
-          context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          context.font = '11px Helvetica';
-          context.fillStyle = "#fff";
-          context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-          context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
-          //tab.push(rect.color);
-          // console.log(rect.color);
+    }else{
+      const tab = new Array();
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      event.data.forEach(function(rect) {
+        if (rect.color === 'custom') {
+        rect.color = tracker.customColor;
+        // console.log(tracker)
+        }
+        // context.strokeStyle = rect.color;
+        // context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+        // context.font = '11px Helvetica';
+        // context.fillStyle = "#fff";
+        // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+        // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+        tab.push(rect.color);
+        // console.log(rect.color);
       });
-      //console.log(tab)
+      console.log(tab)
       mixColor(tab);
     }
   });
@@ -69,6 +62,7 @@ function synthesize(tab) {
     totalColorG = totalColorG + tab[i][1];
     totalColorB = totalColorB + tab[i][2];
   };
+  console.log(totalColorR +","+totalColorG+","+totalColorB)
   mainColorR = totalColorR / tab.length;
   mainColorG = totalColorG / tab.length;
   mainColorB = totalColorB / tab.length;
